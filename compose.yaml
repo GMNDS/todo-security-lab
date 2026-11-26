@@ -1,0 +1,22 @@
+services:
+  app:
+    image: todo-security-lab:local
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      DB_PATH: /app/data/todo.sqlite
+      DEMO_PASSWORD: ${DEMO_PASSWORD:?Defina DEMO_PASSWORD no ambiente}
+      SESSION_SECRET: ${SESSION_SECRET:?Defina SESSION_SECRET no ambiente}
+    ports:
+      - "127.0.0.1:${HOST_PORT:-3000}:3000"
+    volumes:
+      - todo-data:/app/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped
+
+volumes:
+  todo-data:

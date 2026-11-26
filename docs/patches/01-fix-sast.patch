@@ -1,0 +1,49 @@
+diff --git a/server/index.js b/server/index.js
+--- a/server/index.js
++++ b/server/index.js
+@@ -188,9 +188,8 @@ function createApp(options = {}) {
+     const q = req.query.q === undefined ? '' : req.query.q;
+     if (!isString(q) || q.length > 200) return res.status(400).json({ error: 'Invalid search query' });
+     try {
+-      // INTENTIONAL SQLi training fixture: keep this user-controlled interpolation isolated to this query.
+-      const query = `SELECT id, title, description, done, createdAt FROM tasks WHERE title LIKE '%${q}%' OR description LIKE '%${q}%' ORDER BY id`;
+-      const tasks = db.prepare(query).all().map((task) => ({ ...task, done: Boolean(task.done) }));
++      const tasks = db.prepare('SELECT id, title, description, done, createdAt FROM tasks WHERE title LIKE ? OR description LIKE ? ORDER BY id')
++        .all(`%${q}%`, `%${q}%`).map((task) => ({ ...task, done: Boolean(task.done) }));
+       res.json({ tasks });
+     } catch (error) {
+       next(error);
+diff --git a/public/app.js b/public/app.js
+--- a/public/app.js
++++ b/public/app.js
+@@ -79,9 +79,7 @@
+       if (task.description) {
+         const description = document.createElement("div");
+         description.className = "task-description";
+-        // Educational intentional stored-XSS baseline: this isolated sink renders task.description as HTML.
+-        // To fix the baseline, replace this assignment with: description.textContent = task.description;
+-        description.innerHTML = task.description;
++        description.textContent = task.description;
+         content.append(description);
+       }
+       const remove = document.createElement("button");
+diff --git a/test/app.test.js b/test/app.test.js
+--- a/test/app.test.js
++++ b/test/app.test.js
+@@ -115,11 +115,14 @@ test('an intentionally emptied database remains empty after reopen', (t) => {
+   reopened.close();
+ });
+ 
+-test('intentional SQL injection fixture is exercised only against isolated test database', async (t) => {
++test('search treats SQL injection payloads as literal text', async (t) => {
+   const { request, dbPath } = await setup(t);
+   assert.match(dbPath, /todo-test-/);
+   await request('/api/login', { method: 'POST', body: JSON.stringify({ username: 'demo', password: 'unit-test-password' }) });
++  const ordinarySearch = await request('/api/tasks?q=search');
++  assert.equal(ordinarySearch.status, 200);
++  assert.equal((await ordinarySearch.json()).tasks.length, 1);
+   const response = await request("/api/tasks?q=' OR 1=1 --");
+   assert.equal(response.status, 200);
+-  assert.ok((await response.json()).tasks.length >= 2);
++  assert.equal((await response.json()).tasks.length, 0);
+ });

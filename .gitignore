@@ -1,0 +1,12 @@
+node_modules/
+data/
+.env*
+!.env.example
+semgrep.json
+trivy.json
+*-report.json
+*-report.sarif
+*.tmp
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

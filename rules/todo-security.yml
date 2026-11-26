@@ -1,0 +1,40 @@
+rules:
+  - id: todo-sql-interpolation
+    message: User-controlled input reaches a SQLite query through SQL string interpolation.
+    severity: ERROR
+    languages:
+      - javascript
+    mode: taint
+    pattern-sources:
+      - pattern: req.query.q
+    pattern-sinks:
+      - pattern: db.prepare($QUERY)
+    metadata:
+      category: security
+      technology:
+        - sqlite
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+
+  - id: todo-stored-xss-innerhtml
+    message: Task description is rendered as HTML; use textContent for untrusted text.
+    severity: ERROR
+    languages:
+      - javascript
+    mode: taint
+    pattern-sources:
+      - pattern: task.description
+    pattern-sinks:
+      - pattern: $ELEMENT.innerHTML = $VALUE
+    metadata:
+      category: security
+      technology:
+        - browser
+      cwe:
+        - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH

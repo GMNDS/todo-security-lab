@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e9">
+  <title>Passo — tarefas com mais calma</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Passo, início"><span class="brand-mark">p.</span><span>passo</span></a>
+    <span class="top-note">um dia de cada vez</span>
+  </header>
+  <main>
+    <section id="login-view" class="login-layout" aria-labelledby="welcome-title" hidden>
+      <div class="welcome-panel">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> SEU ESPAÇO, NO SEU TEMPO</div>
+        <h1 id="welcome-title">Menos na cabeça.<br><em>Mais no caminho.</em></h1>
+        <p>Um lugar simples para organizar o que importa — e seguir com leveza.</p>
+        <div class="path-art" aria-hidden="true"><span class="path-sun"></span><span class="path-line"></span><span class="path-leaf">✳</span></div>
+        <span class="welcome-caption">FAÇA CABER NO SEU DIA</span>
+      </div>
+      <div class="login-card">
+        <div class="card-kicker">BOM TER VOCÊ AQUI</div>
+        <h2>Entre no seu espaço</h2>
+        <p class="card-intro">A gente continua de onde você parou.</p>
+        <form id="login-form">
+          <label for="username">Seu usuário</label>
+          <input id="username" name="username" autocomplete="username" required>
+          <label for="password">Sua senha</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+          <p id="login-error" class="form-error" role="alert" hidden></p>
+          <button class="button button-primary login-button" type="submit"><span>Entrar</span><span aria-hidden="true">→</span></button>
+        </form>
+        <p class="privacy-note"><span aria-hidden="true">◌</span> Ambiente de demonstração. Use apenas dados fictícios.</p>
+      </div>
+    </section>
+
+    <section id="app-view" class="workspace" aria-labelledby="page-title" hidden>
+      <div class="workspace-head">
+        <div>
+          <div class="eyebrow"><span class="eyebrow-dot"></span> SEU ESPAÇO DE TAREFAS</div>
+          <h1 id="page-title">Bom te ver, <span id="user-name"></span><span class="title-period">.</span></h1>
+          <p class="subtitle">Um passo de cada vez. O que vem primeiro?</p>
+        </div>
+        <button id="logout-button" class="button button-quiet" type="button">Sair <span aria-hidden="true">↗</span></button>
+      </div>
+      <section class="composer" aria-labelledby="new-task-title">
+        <div class="composer-heading"><span class="plus-mark" aria-hidden="true">+</span><div><h2 id="new-task-title">Tire da cabeça</h2><p>e coloque no seu caminho</p></div></div>
+        <form id="task-form" class="task-form">
+          <label class="sr-only" for="task-title">O que você precisa fazer?</label>
+          <input id="task-title" name="title" maxlength="180" placeholder="O que você precisa fazer?" required>
+          <label class="sr-only" for="task-description">Detalhes (opcional)</label>
+          <input id="task-description" name="description" maxlength="1000" placeholder="Um detalhe, se quiser (opcional)">
+          <button class="button button-primary" type="submit">Adicionar <span aria-hidden="true">＋</span></button>
+        </form>
+        <p id="task-error" class="form-error" role="alert" hidden></p>
+      </section>
+      <section class="list-section" aria-labelledby="tasks-heading">
+        <div class="list-heading">
+          <div><h2 id="tasks-heading">Seu caminho</h2><span id="task-count" class="task-count"></span></div>
+          <label class="search-box"><span aria-hidden="true">⌕</span><span class="sr-only">Buscar tarefas</span><input id="search" type="search" placeholder="Buscar tarefa..." autocomplete="off"></label>
+        </div>
+        <div id="task-status" class="status" role="status" aria-live="polite">Carregando suas tarefas…</div>
+        <ul id="task-list" class="task-list"></ul>
+      </section>
+      <footer class="workspace-footer"><span>✳</span> Pequenos passos também levam longe.</footer>
+    </section>
+  </main>
+</body>
+</html>

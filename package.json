@@ -1,0 +1,21 @@
+{
+  "name": "todo-security-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Educational todo application security lab",
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node --test",
+    "check": "node --check server/index.js && node --check test/app.test.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.2.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "lodash": "4.17.20"
+  }
+}
