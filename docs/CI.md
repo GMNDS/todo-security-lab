@@ -30,8 +30,12 @@ trivy fs --scanners vuln --exit-code 1 --format json --output trivy.json .
 ```
 
 Both scanner reports are written as `semgrep.json` and `trivy.json`; GitHub
-Actions uploads them as artifacts even when a scan fails. A missing local
-scanner is not a substitute for the corresponding CI check.
+Actions uploads them as artifacts even when a scan finds vulnerabilities. An
+additional **`security-report-html`** artifact combines their findings into
+`security-report.html`, with severity, rule/CVE, source location or package,
+installed version, and fixed version when available. Download it from the
+workflow run's **Artifacts** section. A missing local scanner is not a
+substitute for the corresponding CI check.
 
 ## Intentional baseline finding
 
