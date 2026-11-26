@@ -188,9 +188,8 @@ function createApp(options = {}) {
     const q = req.query.q === undefined ? '' : req.query.q;
     if (!isString(q) || q.length > 200) return res.status(400).json({ error: 'Invalid search query' });
     try {
-      // INTENTIONAL SQLi training fixture: keep this user-controlled interpolation isolated to this query.
-      const query = `SELECT id, title, description, done, createdAt FROM tasks WHERE title LIKE '%${q}%' OR description LIKE '%${q}%' ORDER BY id`;
-      const tasks = db.prepare(query).all().map((task) => ({ ...task, done: Boolean(task.done) }));
+      const tasks = db.prepare('SELECT id, title, description, done, createdAt FROM tasks WHERE title LIKE ? OR description LIKE ? ORDER BY id')
+        .all(`%${q}%`, `%${q}%`).map((task) => ({ ...task, done: Boolean(task.done) }));
       res.json({ tasks });
     } catch (error) {
       next(error);

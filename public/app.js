@@ -79,9 +79,7 @@
       if (task.description) {
         const description = document.createElement("div");
         description.className = "task-description";
-        // Educational intentional stored-XSS baseline: this isolated sink renders task.description as HTML.
-        // To fix the baseline, replace this assignment with: description.textContent = task.description;
-        description.innerHTML = task.description;
+        description.textContent = task.description;
         content.append(description);
       }
       const remove = document.createElement("button");
