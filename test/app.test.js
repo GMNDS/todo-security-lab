@@ -115,11 +115,14 @@ test('an intentionally emptied database remains empty after reopen', (t) => {
   reopened.close();
 });
 
-test('intentional SQL injection fixture is exercised only against isolated test database', async (t) => {
+test('search treats SQL injection payloads as literal text', async (t) => {
   const { request, dbPath } = await setup(t);
   assert.match(dbPath, /todo-test-/);
   await request('/api/login', { method: 'POST', body: JSON.stringify({ username: 'demo', password: 'unit-test-password' }) });
+  const ordinarySearch = await request('/api/tasks?q=search');
+  assert.equal(ordinarySearch.status, 200);
+  assert.equal((await ordinarySearch.json()).tasks.length, 1);
   const response = await request("/api/tasks?q=' OR 1=1 --");
   assert.equal(response.status, 200);
-  assert.ok((await response.json()).tasks.length >= 2);
+  assert.equal((await response.json()).tasks.length, 0);
 });
